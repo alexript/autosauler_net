@@ -14,15 +14,17 @@
 @import <Foundation/CPURLConnection.j>
 
 function TrimString(sInString){
-	var str = sInString.replace("/&nbsp;/g" ," ");
-	str = str.replace("/(^\s+)|(\s+$)/g", "");
-	return str;
+    var str = sInString.replace("/&nbsp;/g" ," ");
+    str = str.replace("/(^\s+)|(\s+$)/g", "");
+    return str;
 }
 
 @implementation LocalizedStringsArray : CPObject
 {
-	CPDictionary _strings;
-	CPString _currentlocale;
+    IniFile	configfile;
+
+    CPDictionary _strings;
+    CPString _currentlocale;
 }
 
 - (id) init
@@ -30,14 +32,20 @@ function TrimString(sInString){
 	self = [super init];
 	_currentlocale = @"C";
 	_strings = [[CPDictionary alloc] init];
-	return self;
+	configfile = nil;
+        return self;
+}
+
+- (void) attachConfig: (IniFile) conf
+{
+    configfile = conf;
 }
 
 - (id) initForLocale: (CPString) aLocale
 {
 	self = [super init];
 	[self selectLocale: aLocale];
-
+        configfile = nil;
 	return self;
 }
 
@@ -124,5 +132,17 @@ function TrimString(sInString){
 	return val;
 
 }
+
+-(CPString) getForKey:(CPString) keyname
+{
+    if(!configfile) {
+        return [self get:keyname];
+    }
+
+    var inivalue = [configfile get:keyname default:keyname];
+    return [self get:inivalue];
+
+}
+
 @end
 //alert('CPLocalizedString');

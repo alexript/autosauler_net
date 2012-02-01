@@ -43,7 +43,7 @@
     if(!_win) {
         CPLog.trace("show progress");
         var msg = [[CPTextField alloc] initWithFrame:CGRectMake(20, 0, 0, 0)];
-        var txt = [MainWindow CPLocalizeString:@"Receive data..."];
+        var txt = [MainFrame CPLocalizeString:@"Receive data..."];
 
         [msg setStringValue:txt];
         [msg setFont:[CPFont boldSystemFontOfSize:16]];
