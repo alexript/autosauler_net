@@ -7,33 +7,92 @@
  */
 
 @import <Foundation/CPObject.j>
+@import "System/IniFile.j"
+@import "System/LocalizedString.j"
+@import "System/Progress.j"
 
+MainWindow = nil; // Static variable for AppController instance
 
 @implementation AppController : CPObject
 {
+    IniFile	langconfig;
+    LocalizedStringsArray LSA;
+    CPWindow mainwindow;
+    Progress progresswindow; 
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
 {
-    var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
-        contentView = [theWindow contentView];
+    LSA = nil;
+    mainwindow = nil;
+    MainWindow = self;
 
-    var label = [[CPTextField alloc] initWithFrame:CGRectMakeZero()];
+    progresswindow = [[Progress alloc] init];
+    [progresswindow show];
 
-    [label setStringValue:@"Hello World!"];
-    [label setFont:[CPFont boldSystemFontOfSize:24.0]];
 
-    [label sizeToFit];
 
-    [label setAutoresizingMask:CPViewMinXMargin | CPViewMaxXMargin | CPViewMinYMargin | CPViewMaxYMargin];
-    [label setCenter:[contentView center]];
+    langconfig = [[IniFile alloc] init];
 
-    [contentView addSubview:label];
+    [[CPNotificationCenter defaultCenter] addObserver:self selector:@selector(afterConfigLoad:) name:"ConfigLoaded" object:langconfig];
+    [[CPNotificationCenter defaultCenter] addObserver:self selector:@selector(afterLocaleLoad:) name:"LocaleLoaded" object:nil];
+    
+    [langconfig loadFile:@"Languages"];
 
-    [theWindow orderFront:self];
+    [self buildMainFrame];
 
-    // Uncomment the following line to turn on the standard menu bar.
-    //[CPMenu setMenuBarVisible:YES];
 }
+
+-(CPString)CPLocalizeString:(CPString)val {
+    if(!LSA) {
+        return val;
+    }
+    return [LSA get:val];
+}
+
+
+- (void) afterConfigLoad:(CPNotification)aNotification
+{
+    CPLog.debug(@"Config loaded");
+    var defaultCenter = [CPNotificationCenter defaultCenter];
+    [defaultCenter removeObserver:self name:@"ConfigLoaded" object:langconfig];
+    var defaultlocale = [langconfig get:@"Default" default:@"English"];
+    CPLog.debug(defaultlocale);
+    LSA = [[LocalizedStringsArray alloc] initForLocale:defaultlocale];
+}
+
+- (void) afterLocaleLoad:(CPNotification)aNotification
+{
+    CPLog.debug(@"Locale loaded");	
+    var defaultCenter = [CPNotificationCenter defaultCenter];
+    [defaultCenter removeObserver:self name:@"LocaleLoaded" object:nil];
+
+    [self isLoggedIn];
+}
+
+- (void) isLoggedIn
+{
+    //    [self makeRequest:@"r=isloggedid"];
+}
+
+- (void) buildMainFrame
+{
+    [progresswindow close]; // system initialisation complete
+
+    if(!mainwindow) {
+        mainwindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask];
+        //        contentView = [mainwindow contentView];
+        //        bounds = [contentView bounds];
+
+        CPLog.debug(@"mainwindow created");
+    }
+}
+
+-(Progress) progress
+{
+    return progresswindow;
+}
+
+
 
 @end

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CibName</key>
+    <string>System</string>
+    <key>CPBundleLocale</key>
+    <string>en</string>
+    <key>CPBundleIdentifier</key>
+    <string>net.autosauler.client.system</string>
+    <key>CPBundleInfoDictionaryVersion</key>
+    <string>1.0</string>
+    <key>CPBundleName</key>
+    <string>System</string>
+    <key>CPBundlePackageType</key>
+    <string>AutoSauler</string>
+    <key>CPBundleVersion</key>
+    <string>1.0</string>
+</dict>
+</plist>
