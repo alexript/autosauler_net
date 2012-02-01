@@ -30,17 +30,13 @@ MainFrame = nil; // Static variable for AppController instance
     progresswindow = [[Progress alloc] init];
     [progresswindow show];
 
+    [[CPNotificationCenter defaultCenter] addObserver:self selector:@selector(afterIconsLoad:) name:"IconsLoaded" object:nil];
     icons = [[IconSet alloc] init];
-
-
     langconfig = [[IniFile alloc] init];
 
     [[CPNotificationCenter defaultCenter] addObserver:self selector:@selector(afterConfigLoad:) name:"ConfigLoaded" object:langconfig];
     [[CPNotificationCenter defaultCenter] addObserver:self selector:@selector(afterLocaleLoad:) name:"LocaleLoaded" object:nil];
     
-    [langconfig loadFile:@"Languages"];
-
-
     return self;
 
 }
@@ -59,6 +55,18 @@ MainFrame = nil; // Static variable for AppController instance
     return [LSA getForKey:val];
 }
 
+- (void) afterIconsLoad:(CPNotification)aNotification
+{
+    CPLog.debug(@"Icons loaded");
+    var defaultCenter = [CPNotificationCenter defaultCenter];
+    [defaultCenter removeObserver:self name:@"IconsLoaded" object:nil];
+    [langconfig loadFile:@"Languages"];
+}
+
+-(CPIcon) icon:(CPString)iconum
+{
+    return [icons get:iconum];
+}
 
 - (void) afterConfigLoad:(CPNotification)aNotification
 {
