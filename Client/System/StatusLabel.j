@@ -2,6 +2,7 @@
 {
     CPMutableArray stack;
     CPString currentstring;
+    int copystartyear;
 }
 
 +(id)initWithFrame:(CGRect)rect
@@ -14,6 +15,7 @@
 -(void) setup
 {
     currentstring = nil;
+    copystartyear = 2012;
     [self setBezeled:YES];
     [self setBezelStyle:CPTextFieldRoundedBezel];
     [self setFont:[CPFont boldSystemFontOfSize:12]];
@@ -28,6 +30,14 @@
 
 }
 
+-(CPString) getCopyYears
+{
+    var now = new Date().getFullYear();
+    if(now>copystartyear) {
+        return  @"" + copystartyear + @"-" + now;
+    }
+    return copystartyear;
+}
 
 -(void) set:(CPString)text
 {
@@ -65,7 +75,7 @@
 {
     currentstring = nil;
     stack = [];
-    [self setStringValue:[MainFrame CPLocalizeKey:@"DefaultStatus"]];
+    [self setStringValue:[MainFrame CPLocalizeKey:@"DefaultStatus"] + @" " + [self getCopyYears]];
 }
 
 @end
