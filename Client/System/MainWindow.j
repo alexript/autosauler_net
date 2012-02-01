@@ -2,6 +2,7 @@
 @import "LocalizedString.j"
 @import "Progress.j"
 @import "StatusLabel.j"
+@import "IconSet.j"
 
 MainFrame = nil; // Static variable for AppController instance
 
@@ -13,6 +14,7 @@ MainFrame = nil; // Static variable for AppController instance
     CPWindow mainwindow;
     Progress progresswindow; 
     StatusLabel status;
+    IconSet icons;
 }
 
 -(void) init 
@@ -28,6 +30,7 @@ MainFrame = nil; // Static variable for AppController instance
     progresswindow = [[Progress alloc] init];
     [progresswindow show];
 
+    icons = [[IconSet alloc] init];
 
 
     langconfig = [[IniFile alloc] init];

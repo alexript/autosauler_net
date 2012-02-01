@@ -126,7 +126,7 @@ function TrimString(sInString){
 	var val = [_strings valueForKey:aKeyString];
 
 	if(val == NULL) {
-		CPLog.error("Not found");
+		CPLog.error("get: Not found translation for " + aKeyString);
 		val = aKeyString;
 	}
 	return val;
