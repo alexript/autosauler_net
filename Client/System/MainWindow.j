@@ -1,6 +1,7 @@
 @import "IniFile.j"
 @import "LocalizedString.j"
 @import "Progress.j"
+@import "StatusLabel.j"
 
 MainFrame = nil; // Static variable for AppController instance
 
@@ -11,6 +12,7 @@ MainFrame = nil; // Static variable for AppController instance
     LocalizedStringsArray LSA;
     CPWindow mainwindow;
     Progress progresswindow; 
+    StatusLabel status;
 }
 
 -(void) init 
@@ -21,6 +23,7 @@ MainFrame = nil; // Static variable for AppController instance
 
     LSA = nil;
     mainwindow = nil;
+    status = nil;
 
     progresswindow = [[Progress alloc] init];
     [progresswindow show];
@@ -44,6 +47,13 @@ MainFrame = nil; // Static variable for AppController instance
         return val;
     }
     return [LSA get:val];
+}
+
+-(CPString)CPLocalizeKey:(CPString)val {
+    if(!LSA) {
+        return val;
+    }
+    return [LSA getForKey:val];
 }
 
 
@@ -74,6 +84,7 @@ MainFrame = nil; // Static variable for AppController instance
 {
     // start logic loop
     //    [self makeRequest:@"r=isloggedid"];
+
 }
 
 - (void) buildMainFrame
@@ -82,17 +93,33 @@ MainFrame = nil; // Static variable for AppController instance
 
     if(!mainwindow) {
         mainwindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask];
-        //        contentView = [mainwindow contentView];
-        //        bounds = [contentView bounds];
+        contentView = [mainwindow contentView];
+        bounds = [contentView bounds];
+        
         var appname = [LSA getForKey:@"ApplicationName"];
         document.title = appname;
         CPLog.debug(@"mainwindow created " + appname);
+
+        status = [StatusLabel initWithFrame:CGRectMake(0, CGRectGetHeight(bounds) - 30, CGRectGetWidth(bounds), 30)];
+        [contentView addSubview:status];
+
+        [mainwindow orderFront:self];
     }
+}
+
+-(CPWindow) window
+{
+    return mainwindow;
 }
 
 -(Progress) progress
 {
     return progresswindow;
+}
+
+-(StatusLabel) status
+{
+    return status;
 }
 
 @end
