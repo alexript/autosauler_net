@@ -117,9 +117,17 @@ MainFrame = nil; // Static variable for AppController instance
     return progresswindow;
 }
 
--(StatusLabel) status
+-(void) setState:(CPString) text
 {
-    return status;
+    if(status) {
+        [status push:text];
+    }
 }
 
+-(void) cleanState
+{
+    if(status) {
+        [status pop];
+    }
+}
 @end
