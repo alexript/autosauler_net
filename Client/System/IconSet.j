@@ -37,7 +37,12 @@
     } else {
         CPLog.trace("Load file for icon " + iconum);
         var link = [self ref:iconum];
-        image = [[CPImage alloc] initWithContentsOfFile:link];
+
+        var w = [self get:iconum+@".w" default:@"-1"];
+        var h = [self get:iconum+@".h" default:@"-1"];
+
+
+        image = [[CPImage alloc] initWithContentsOfFile:link size:CGSizeMake(w,h)];
         [cache setObject:image forKey:iconum];
     }
 

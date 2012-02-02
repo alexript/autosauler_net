@@ -68,6 +68,11 @@ MainFrame = nil; // Static variable for AppController instance
     return [icons get:iconum];
 }
 
+-(CPIcon) icon:(CPString)iconum size:(CPSize)imgsize
+{
+    return [icons get:iconum size:imgsize];
+}
+
 - (void) afterConfigLoad:(CPNotification)aNotification
 {
     CPLog.debug(@"Config loaded");

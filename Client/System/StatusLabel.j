@@ -1,8 +1,10 @@
+@import <AppKit/CPImageView.j>
 @implementation StatusLabel : CPTextField
 {
     CPMutableArray stack;
     CPString currentstring;
     int copystartyear;
+    int rightoffset;
 }
 
 +(id)initWithFrame:(CGRect)rect
@@ -16,6 +18,7 @@
 {
     currentstring = nil;
     copystartyear = 2012;
+    rightoffset = 16;
     [self setBezeled:YES];
     [self setBezelStyle:CPTextFieldRoundedBezel];
     [self setFont:[CPFont boldSystemFontOfSize:12]];
@@ -28,6 +31,32 @@
     
     [self clean];
 
+    //    [self addIcon:@"185"];
+    //[self addIcon:@"186"];
+    //[self addIcon:@"185"];
+}
+ 
+
+-(CPImageView) addIcon:(CPString) iconum
+{
+    var maxheight = 16;
+    var bounds = [self bounds];
+    var testicon = [MainFrame icon:iconum];
+    var icosize = [testicon size];
+
+    var icoheight = icosize.height;
+    var icowidth = icosize.width;
+    if(icoheight>maxheight) {
+        icowidth = maxheight * icowidth/icoheight;
+        icoheight = maxheight;
+    }
+
+    var testiv = [[CPImageView alloc] initWithFrame:CGRectMake(CGRectGetWidth(bounds) -rightoffset -icowidth , (CGRectGetHeight(bounds) -icoheight)/2 +1 , icowidth, icoheight)];
+    [testiv setImage:testicon];
+    [testiv setAutoresizingMask:CPViewMinYMargin|CPViewMinXMargin];
+    [self addSubview:testiv];
+    rightoffset = rightoffset + icowidth + 2;
+    return testiv;
 }
 
 -(CPString) getCopyYears
