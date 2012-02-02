@@ -31,7 +31,17 @@
     
     [self clean];
 
-    //    [self addIcon:@"185"];
+
+    // add ico with badge ----
+    // var ico = [self addIcon:@"185"];
+    // var bounds = [ico bounds];
+    // var w = CGRectGetWidth(bounds);
+    // var h = CGRectGetHeight(bounds);
+    // var l = [[CPTextField alloc] initWithFrame:CGRectMake(w/2, 0, w/2, h/2)];
+    // [l setBackgroundColor:[CPColor colorWithRed:213.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0]];        
+    // [ico addSubview:l];
+    // -----------------------
+
     //[self addIcon:@"186"];
     //[self addIcon:@"185"];
 }
