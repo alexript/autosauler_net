@@ -3,6 +3,7 @@
 @import "Progress.j"
 @import "StatusLabel.j"
 @import "IconSet.j"
+@import "StatusIndicator.j"
 
 MainFrame = nil; // Static variable for AppController instance
 
@@ -96,8 +97,52 @@ MainFrame = nil; // Static variable for AppController instance
     [self isLoggedIn];
 }
 
+/* indicator tests
+-(void)clickInformer:(CPString)iname
+{
+    if(iname=="eye") {
+        [status dropIndicatorBage:iname];
+        [status setIndicatorBage:@"target"];
+    }
+}
+
+-(void)bageInformer:(CPString)iname
+{
+    CPLog.trace("Bage on " + iname);
+}
+
+-(void)initInformer:(CPString)iname
+{
+    CPLog.trace("init informer " + iname);
+}
+*/
+
 - (void) isLoggedIn
 {
+    /* indicator tests
+    var indicator = [[StatusIndicator alloc] initWithIco:@"11"]; // clock indicator
+    [indicator addClickObserver:self];
+    [indicator addBageObserver:self];
+    [indicator addInitObserver:self];
+    [status addIndicator:indicator forName:@"clock"];
+
+    indicator = [[StatusIndicator alloc] initWithIco:@"12"]; // eye indicator
+    [indicator addClickObserver:self];
+    [indicator addBageObserver:self];
+    [indicator addInitObserver:self];
+    [status addIndicator:indicator forName:@"eye"];
+
+    indicator = [[StatusIndicator alloc] initWithIco:@"13"]; // eye indicator
+    [indicator addClickObserver:self];
+    [indicator addBageObserver:self];
+    [indicator addInitObserver:self];
+    [status addIndicator:indicator forName:@"target"];
+
+    [status setIndicatorBage:@"clock"];
+    [status setIndicatorBage:@"eye"];
+    [status dropIndicatorBage:@"clock"];
+    */
+
     // start logic loop
     //    [self makeRequest:@"r=isloggedid"];
 

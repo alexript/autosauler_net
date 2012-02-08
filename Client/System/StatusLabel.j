@@ -1,10 +1,14 @@
-@import <AppKit/CPImageView.j>
+@import "StatusIndicator.j"
+@import "IndicatorIco.j"
+
 @implementation StatusLabel : CPTextField
 {
     CPMutableArray stack;
     CPString currentstring;
     int copystartyear;
     int rightoffset;
+    CPDictionary indicators;
+    CPDictionary indicatoricons;
 }
 
 +(id)initWithFrame:(CGRect)rect
@@ -16,6 +20,8 @@
 
 -(void) setup
 {
+    indicators = [[CPDictionary alloc] init];
+    indicatoricons = [[CPDictionary alloc] init];
     currentstring = nil;
     copystartyear = 2012;
     rightoffset = 16;
@@ -32,22 +38,73 @@
     [self clean];
 
 
-    // add ico with badge ----
-    // var ico = [self addIcon:@"185"];
-    // var bounds = [ico bounds];
-    // var w = CGRectGetWidth(bounds);
-    // var h = CGRectGetHeight(bounds);
-    // var l = [[CPTextField alloc] initWithFrame:CGRectMake(w/2, 0, w/2, h/2)];
-    // [l setBackgroundColor:[CPColor colorWithRed:213.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0]];        
-    // [ico addSubview:l];
-    // -----------------------
-
-    //[self addIcon:@"186"];
-    //[self addIcon:@"185"];
-}
  
+}
 
--(CPImageView) addIcon:(CPString) iconum
+-(void) setIndicatorBage:(CPString)iname
+{
+    if([indicators containsKey:iname]) {
+        var ico = [indicatoricons objectForKey:iname];
+        var bounds = [ico bounds];
+        var w = CGRectGetWidth(bounds);
+        var h = CGRectGetHeight(bounds);
+        var l = [[CPTextField alloc] initWithFrame:CGRectMake(w-8, 0, 8, 8)];
+        [l setBackgroundColor:[CPColor colorWithRed:213.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0]];        
+        [ico addSubview:l];
+        var indicator = [indicators objectForKey:iname];
+        [indicator callBageObservers:iname];
+    }
+}
+
+-(void) dropIndicatorBage:(CPString)iname
+{
+    if([indicators containsKey:iname]) {
+        var ico = [indicatoricons objectForKey:iname];
+        var view = [ico subviews];
+        var count = view ? view.length : 0;
+        while(count--) {
+            var v = view[count];
+            [v removeFromSuperview];
+        }
+    }
+}
+
+-(void) addIndicator:(StatusIndicator)indicator forName:(CPString)iname
+{
+    var ico = [self addIcon:[indicator icon] forName:iname];
+    [ico attachIndicator:indicator];
+    [indicators setValue:indicator forKey:iname];
+    [indicatoricons setValue:ico forKey:iname];
+    [indicator callInitObservers:iname];
+} 
+
+-(void) removeIndicator:(CPString)iname
+{
+    if([indicators containsKey:iname]) {
+        var views = [indicatoricons allValues];
+        var count = views ? views.length : 0;
+        while(count--) {
+            var view = views[count];
+            [view removeFromSuperview];
+        }
+        [indicatoricons removeAllObjects];
+        rightoffset = 16;
+        var indicator = [indicators objectForKey:iname];
+        [indicators removeObjectForKey:iname];
+        
+        var inds = [indicators allKeys];
+        count = inds ? inds.length : 0;
+        while(count--) {
+            var ico = [self addIcon:[[indicators objectForKey:inds[count]] icon] forName:inds[count]];
+            [ico attachIndicator:[indicators objectForKey:inds[count]]];
+            [indicatoricons setValue:ico forKey:inds[count]];
+        }
+        [indicator callRemoveObservers:iname];
+        [indicator removeObservers];
+    }
+}
+
+-(IndicatorIco) addIcon:(CPString)iconum forName:(CPString)iname
 {
     var maxheight = 16;
     var bounds = [self bounds];
@@ -61,11 +118,11 @@
         icoheight = maxheight;
     }
 
-    var testiv = [[CPImageView alloc] initWithFrame:CGRectMake(CGRectGetWidth(bounds) -rightoffset -icowidth , (CGRectGetHeight(bounds) -icoheight)/2 +1 , icowidth, icoheight)];
+    var testiv = [[IndicatorIco alloc] initWithFrame:CGRectMake(CGRectGetWidth(bounds) -rightoffset -icowidth , (CGRectGetHeight(bounds) -icoheight)/2 +1 , (icowidth-0), (icoheight-0)) forName:iname];
     [testiv setImage:testicon];
     [testiv setAutoresizingMask:CPViewMinYMargin|CPViewMinXMargin];
     [self addSubview:testiv];
-    rightoffset = rightoffset + icowidth + 2;
+    rightoffset = rightoffset + (icowidth-0) + 2;
     return testiv;
 }
 
