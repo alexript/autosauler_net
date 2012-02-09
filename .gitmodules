@@ -1,3 +1,6 @@
 [submodule "Client/Library/EKActivityIndicatorView"]
 	path = Client/Library/EKActivityIndicatorView
 	url = git://github.com/eliaskg/EKActivityIndicatorView.git
+[submodule "Client/Library/SCAuth"]
+	path = Client/Library/SCAuth
+	url = git://github.com/saikat/SCAuth.git
