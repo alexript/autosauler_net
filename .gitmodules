@@ -1,0 +1,3 @@
+[submodule "Client/Library/EKActivityIndicatorView"]
+	path = Client/Library/EKActivityIndicatorView
+	url = git://github.com/eliaskg/EKActivityIndicatorView.git
