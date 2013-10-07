@@ -38,9 +38,6 @@
     [self setAutoresizingMask:CPViewMinYMargin|CPViewWidthSizable];
     
     [self clean];
-
-
- 
 }
 
 -(void) setIndicatorBage:(CPString)iname
