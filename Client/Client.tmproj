@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>workspace/autosauler_net/Client/AppController.j</string>
+	<string>System/StatusLabel.j</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -31,11 +31,13 @@
 			<key>filename</key>
 			<string>AppController.j</string>
 			<key>lastUsed</key>
-			<date>2013-10-07T09:32:41Z</date>
+			<date>2013-10-07T09:57:29Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>main.j</string>
+			<key>lastUsed</key>
+			<date>2013-10-07T09:56:49Z</date>
 		</dict>
 		<dict>
 			<key>children</key>
@@ -63,10 +65,14 @@
 				<dict>
 					<key>filename</key>
 					<string>System/MainWindow.j</string>
+					<key>lastUsed</key>
+					<date>2013-10-07T09:56:21Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>System/Progress.j</string>
+					<key>lastUsed</key>
+					<date>2013-10-07T09:54:47Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -75,6 +81,10 @@
 				<dict>
 					<key>filename</key>
 					<string>System/StatusLabel.j</string>
+					<key>lastUsed</key>
+					<date>2013-10-07T09:57:29Z</date>
+					<key>selected</key>
+					<true/>
 				</dict>
 			</array>
 			<key>expanded</key>
@@ -91,14 +101,70 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>workspace/autosauler_net/Client/AppController.j</key>
+		<key>AppController.j</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>3</integer>
+				<integer>8</integer>
 				<key>line</key>
-				<integer>6</integer>
+				<integer>18</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>System/MainWindow.j</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>165</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>4</integer>
+		</dict>
+		<key>System/Progress.j</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>62</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>24</integer>
+		</dict>
+		<key>System/StatusLabel.j</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>17</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>main.j</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>12</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -108,11 +174,15 @@
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>workspace/autosauler_net/Client/AppController.j</string>
+		<string>AppController.j</string>
+		<string>System/StatusLabel.j</string>
+		<string>main.j</string>
+		<string>System/MainWindow.j</string>
+		<string>System/Progress.j</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{404, 285}, {720, 438}}</string>
+	<string>{{209, 4}, {1231, 874}}</string>
 </dict>
 </plist>

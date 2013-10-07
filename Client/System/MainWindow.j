@@ -163,7 +163,7 @@ indicator = [[StatusIndicator alloc] initWithIco:@"13"]; // eye indicator
 		document.title = appname;
 		CPLog.debug(@"mainwindow created " + appname);
 
-		status = [StatusLabel initWithFrame:CGRectMake(0, CGRectGetHeight(bounds) - 30, CGRectGetWidth(bounds), 30)];
+		status = [StatusLabel initWithFrame:CGRectMake(0, CGRectGetHeight(bounds) - 29, CGRectGetWidth(bounds), 29)];
 		[contentView addSubview:status];
 
 		[mainwindow orderFront:self];
