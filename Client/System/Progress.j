@@ -1,3 +1,5 @@
+@class MainWindow
+@global MainFrame
 @implementation Progress : CPObject
 {
     short _statecounter;
@@ -54,11 +56,11 @@
 
         _win = [[CPWindow alloc] initWithContentRect:CGRectMake(0, 0, CGRectGetWidth([msg bounds]) + 40, CGRectGetHeight([msg bounds]) + 20 ) styleMask:CPHUDBackgroundWindowMask];
 
-        contentView = [_win contentView];
+        var contentView = [_win contentView];
         [contentView addSubview:msg];
 
         var size = [_win frame].size;
-        containerSize = [CPPlatform isBrowser] ? [[_win platformWindow] contentBounds].size : [[_win screen] visibleFrame].size;
+        var containerSize = [CPPlatform isBrowser] ? [[_win platformWindow] contentBounds].size : [[_win screen] visibleFrame].size;
         
         [_win setFrameOrigin:CGPointMake((containerSize.width - size.width - 50), (containerSize.height - size.height - 50))];
         

@@ -1,6 +1,8 @@
 @import "StatusIndicator.j"
 @import "IndicatorIco.j"
 
+@global MainFrame
+
 @implementation StatusLabel : CPTextField
 {
     CPMutableArray stack;

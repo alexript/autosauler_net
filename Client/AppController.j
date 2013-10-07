@@ -16,11 +16,7 @@
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
 {
-    mainwindow = [[MainWindow alloc] init];
-
+    var mainwindow = [[MainWindow alloc] init];
 }
-
-
-
 
 @end
