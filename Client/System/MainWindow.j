@@ -97,7 +97,8 @@ MainFrame = nil; // Static variable for AppController instance
     [self isLoggedIn];
 }
 
-/* indicator tests
+// indicator tests
+/*
 -(void)clickInformer:(CPString)iname
 {
     if(iname=="eye") {
@@ -119,7 +120,8 @@ MainFrame = nil; // Static variable for AppController instance
 
 - (void) isLoggedIn
 {
-    /* indicator tests
+    // indicator tests
+/*
     var indicator = [[StatusIndicator alloc] initWithIco:@"11"]; // clock indicator
     [indicator addClickObserver:self];
     [indicator addBageObserver:self];
@@ -141,7 +143,7 @@ MainFrame = nil; // Static variable for AppController instance
     [status setIndicatorBage:@"clock"];
     [status setIndicatorBage:@"eye"];
     [status dropIndicatorBage:@"clock"];
-    */
+  */  
 
     // start logic loop
     //    [self makeRequest:@"r=isloggedid"];
