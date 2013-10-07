@@ -1,6 +1,8 @@
 @import "StatusIndicator.j"
 @import "IndicatorIco.j"
 
+@import <AppKit/CPTextField.j>
+
 @global MainFrame
 
 @implementation StatusLabel : CPTextField

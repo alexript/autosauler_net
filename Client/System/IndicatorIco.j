@@ -1,3 +1,5 @@
+@import <AppKit/CPImageView.j>
+
 @implementation IndicatorIco : CPImageView
 {
     StatusIndicator indicator;

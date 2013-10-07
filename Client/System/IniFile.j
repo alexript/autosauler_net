@@ -4,6 +4,7 @@
 @import <Foundation/CPString.j>
 @import <Foundation/CPURLRequest.j>
 @import <Foundation/CPURLConnection.j>
+@import <Foundation/CPNotificationCenter.j>
 
 
 @implementation IniFile : CPObject

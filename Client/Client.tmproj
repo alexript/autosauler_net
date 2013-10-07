@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>System/StatusLabel.j</string>
+	<string>System/Info.plist</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -22,22 +22,8 @@
 					<string>Resources/Russian.strings</string>
 				</dict>
 			</array>
-			<key>expanded</key>
-			<true/>
 			<key>name</key>
 			<string>Resources</string>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>AppController.j</string>
-			<key>lastUsed</key>
-			<date>2013-10-07T09:57:29Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>main.j</string>
-			<key>lastUsed</key>
-			<date>2013-10-07T09:56:49Z</date>
 		</dict>
 		<dict>
 			<key>children</key>
@@ -45,46 +31,56 @@
 				<dict>
 					<key>filename</key>
 					<string>System/IconSet.j</string>
+					<key>lastUsed</key>
+					<date>2013-10-07T10:12:11Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>System/IndicatorIco.j</string>
+					<key>lastUsed</key>
+					<date>2013-10-07T10:12:13Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>System/Info.plist</string>
+					<key>lastUsed</key>
+					<date>2013-10-07T10:39:09Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>System/IniFile.j</string>
+					<key>lastUsed</key>
+					<date>2013-10-07T10:12:20Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>System/LocalizedString.j</string>
+					<key>lastUsed</key>
+					<date>2013-10-07T10:12:24Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>System/MainWindow.j</string>
 					<key>lastUsed</key>
-					<date>2013-10-07T09:56:21Z</date>
+					<date>2013-10-07T10:12:34Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>System/Progress.j</string>
 					<key>lastUsed</key>
-					<date>2013-10-07T09:54:47Z</date>
+					<date>2013-10-07T10:39:04Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>System/StatusIndicator.j</string>
+					<key>lastUsed</key>
+					<date>2013-10-07T10:12:29Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>System/StatusLabel.j</string>
 					<key>lastUsed</key>
-					<date>2013-10-07T09:57:29Z</date>
-					<key>selected</key>
-					<true/>
+					<date>2013-10-07T10:08:18Z</date>
 				</dict>
 			</array>
 			<key>expanded</key>
@@ -95,6 +91,26 @@
 		<dict>
 			<key>filename</key>
 			<string>Info.plist</string>
+			<key>lastUsed</key>
+			<date>2013-10-07T10:39:09Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>Jakefile</string>
+			<key>selected</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>main.j</string>
+			<key>lastUsed</key>
+			<date>2013-10-07T09:56:49Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>AppController.j</string>
+			<key>lastUsed</key>
+			<date>2013-10-07T10:02:51Z</date>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
@@ -115,19 +131,79 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>Info.plist</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>System/Info.plist</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>40</integer>
+				<key>line</key>
+				<integer>9</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>12</integer>
+				<key>line</key>
+				<integer>9</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>40</integer>
+				<key>line</key>
+				<integer>9</integer>
+			</dict>
+		</dict>
 		<key>System/MainWindow.j</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>2</integer>
+				<integer>79</integer>
 				<key>line</key>
 				<integer>165</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>4</integer>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>78</integer>
+				<key>line</key>
+				<integer>165</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>80</integer>
+				<key>line</key>
+				<integer>165</integer>
+			</dict>
 		</dict>
 		<key>System/Progress.j</key>
 		<dict>
@@ -141,21 +217,7 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>24</integer>
-		</dict>
-		<key>System/StatusLabel.j</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>17</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>26</integer>
 		</dict>
 		<key>main.j</key>
 		<dict>
@@ -175,10 +237,11 @@
 	<key>openDocuments</key>
 	<array>
 		<string>AppController.j</string>
-		<string>System/StatusLabel.j</string>
 		<string>main.j</string>
 		<string>System/MainWindow.j</string>
 		<string>System/Progress.j</string>
+		<string>Info.plist</string>
+		<string>System/Info.plist</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

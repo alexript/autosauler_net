@@ -1,3 +1,5 @@
+@import <AppKit/CPWindow.j>
+
 @class MainWindow
 @global MainFrame
 @implementation Progress : CPObject
