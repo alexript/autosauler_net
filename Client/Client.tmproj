@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>System/Info.plist</string>
+	<string>main.j</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -38,19 +38,19 @@
 					<key>filename</key>
 					<string>System/IndicatorIco.j</string>
 					<key>lastUsed</key>
-					<date>2013-10-07T10:12:13Z</date>
+					<date>2013-10-07T10:45:30Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>System/Info.plist</string>
 					<key>lastUsed</key>
-					<date>2013-10-07T10:39:09Z</date>
+					<date>2013-10-07T10:42:59Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>System/IniFile.j</string>
 					<key>lastUsed</key>
-					<date>2013-10-07T10:12:20Z</date>
+					<date>2013-10-07T10:44:15Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -68,7 +68,7 @@
 					<key>filename</key>
 					<string>System/Progress.j</string>
 					<key>lastUsed</key>
-					<date>2013-10-07T10:39:04Z</date>
+					<date>2013-10-07T10:48:56Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -80,7 +80,7 @@
 					<key>filename</key>
 					<string>System/StatusLabel.j</string>
 					<key>lastUsed</key>
-					<date>2013-10-07T10:08:18Z</date>
+					<date>2013-10-07T10:46:26Z</date>
 				</dict>
 			</array>
 			<key>expanded</key>
@@ -97,14 +97,16 @@
 		<dict>
 			<key>filename</key>
 			<string>Jakefile</string>
-			<key>selected</key>
-			<true/>
+			<key>lastUsed</key>
+			<date>2013-10-07T11:24:36Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>main.j</string>
 			<key>lastUsed</key>
-			<date>2013-10-07T09:56:49Z</date>
+			<date>2013-10-07T11:24:36Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>filename</key>
@@ -145,6 +147,20 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>System/IndicatorIco.j</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>1</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>System/Info.plist</key>
 		<dict>
 			<key>caret</key>
@@ -174,6 +190,20 @@
 				<key>line</key>
 				<integer>9</integer>
 			</dict>
+		</dict>
+		<key>System/IniFile.j</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>43</integer>
+				<key>line</key>
+				<integer>6</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>System/MainWindow.j</key>
 		<dict>
@@ -210,14 +240,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>12</integer>
+				<integer>26</integer>
 				<key>line</key>
-				<integer>62</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>26</integer>
+			<integer>0</integer>
+		</dict>
+		<key>System/StatusLabel.j</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>30</integer>
+				<key>line</key>
+				<integer>3</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>main.j</key>
 		<dict>
@@ -242,6 +286,9 @@
 		<string>System/Progress.j</string>
 		<string>Info.plist</string>
 		<string>System/Info.plist</string>
+		<string>System/IniFile.j</string>
+		<string>System/IndicatorIco.j</string>
+		<string>System/StatusLabel.j</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

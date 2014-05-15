@@ -1179,7 +1179,10 @@ CFHTTPRequest.prototype.responseXML = function()
 {
     var responseXML = this._nativeRequest.responseXML;
 
-    if (responseXML && (NativeRequest === window.XMLHttpRequest))
+
+
+
+    if (responseXML && (NativeRequest === window.XMLHttpRequest) && responseXML.documentRoot)
         return responseXML;
 
     return parseXML(this.responseText());
@@ -1660,7 +1663,7 @@ var _plist_traverseNextNode = function(anXMLNode, stayWithin, stack)
 {
     var node = anXMLNode;
 
-    node = (node.firstChild); if (node !== NULL && ((node.nodeType) === 8 || (node.nodeType) === 3)) while ((node = (node.nextSibling)) && ((node.nodeType) === 8 || (node.nodeType) === 3)) ;;
+    { node = (node.firstChild); if (node !== NULL && ((node.nodeType) === 8 || (node.nodeType) === 3)) while ((node = (node.nextSibling)) && ((node.nodeType) === 8 || (node.nodeType) === 3)); };
 
 
     if (node)
@@ -1679,7 +1682,7 @@ var _plist_traverseNextNode = function(anXMLNode, stayWithin, stack)
 
         node = anXMLNode;
 
-        while ((node = (node.nextSibling)) && ((node.nodeType) === 8 || (node.nodeType) === 3)) ;;
+        while ((node = (node.nextSibling)) && ((node.nodeType) === 8 || (node.nodeType) === 3));;
 
         if (node)
             return node;
@@ -1694,7 +1697,7 @@ var _plist_traverseNextNode = function(anXMLNode, stayWithin, stack)
     {
         var next = node;
 
-        while ((next = (next.nextSibling)) && ((next.nodeType) === 8 || (next.nodeType) === 3)) ;;
+        while ((next = (next.nextSibling)) && ((next.nodeType) === 8 || (next.nodeType) === 3));;
 
 
         if (next)
@@ -1858,11 +1861,11 @@ CFPropertyList.propertyListFromXML = function( aStringOrXMLNode)
 
 
     while (((String(XMLNode.nodeName)) === XML_DOCUMENT) || ((String(XMLNode.nodeName)) === XML_XML))
-        XMLNode = (XMLNode.firstChild); if (XMLNode !== NULL && ((XMLNode.nodeType) === 8 || (XMLNode.nodeType) === 3)) while ((XMLNode = (XMLNode.nextSibling)) && ((XMLNode.nodeType) === 8 || (XMLNode.nodeType) === 3)) ;;
+        { XMLNode = (XMLNode.firstChild); if (XMLNode !== NULL && ((XMLNode.nodeType) === 8 || (XMLNode.nodeType) === 3)) while ((XMLNode = (XMLNode.nextSibling)) && ((XMLNode.nodeType) === 8 || (XMLNode.nodeType) === 3)); };
 
 
     if (((XMLNode.nodeType) === 10))
-        while ((XMLNode = (XMLNode.nextSibling)) && ((XMLNode.nodeType) === 8 || (XMLNode.nodeType) === 3)) ;;
+        while ((XMLNode = (XMLNode.nextSibling)) && ((XMLNode.nodeType) === 8 || (XMLNode.nodeType) === 3));;
 
 
     if (!((String(XMLNode.nodeName)) === PLIST_PLIST))
@@ -1887,7 +1890,7 @@ CFPropertyList.propertyListFromXML = function( aStringOrXMLNode)
         if ((String(XMLNode.nodeName)) === PLIST_KEY)
         {
             key = (XMLNode.textContent || (XMLNode.textContent !== "" && textContent([XMLNode])));
-            while ((XMLNode = (XMLNode.nextSibling)) && ((XMLNode.nodeType) === 8 || (XMLNode.nodeType) === 3)) ;;
+            while ((XMLNode = (XMLNode.nextSibling)) && ((XMLNode.nodeType) === 8 || (XMLNode.nodeType) === 3));;
         }
 
         switch (String((String(XMLNode.nodeName))))
@@ -2736,9 +2739,17 @@ function resolveURL(aURL)
         absoluteBaseURL = baseURL.absoluteURL(),
         baseParts = ((absoluteBaseURL)._parts || CFURLGetParts(absoluteBaseURL));
 
-    if (parts.scheme || parts.authority)
-        resolvedParts = parts;
+    if (!parts.scheme && parts.authorityRoot)
+    {
 
+
+        resolvedParts = CFURLPartsCreateCopy(parts);
+        resolvedParts.scheme = baseURL.scheme();
+    }
+    else if (parts.scheme || parts.authority)
+    {
+        resolvedParts = parts;
+    }
     else
     {
         resolvedParts = { };
@@ -2761,7 +2772,6 @@ function resolveURL(aURL)
             resolvedParts.path = parts.path;
             resolvedParts.pathComponents = pathComponents;
         }
-
         else
         {
             var basePathComponents = baseParts.pathComponents,
@@ -5566,12 +5576,15 @@ if (typeof exports != "undefined" && !exports.acorn) {
   var _action = {keyword: "action"}, _selector = {keyword: "selector"}, _class = {keyword: "class"}, _global = {keyword: "global"};
   var _dictionaryLiteral = {keyword: "{"}, _arrayLiteral = {keyword: "["};
   var _ref = {keyword: "ref"}, _deref = {keyword: "deref"};
+  var _protocol = {keyword: "protocol"}, _optional = {keyword: "optional"}, _required = {keyword: "required"};
+  var _interface = {keyword: "interface"};
 
 
 
   var _filename = {keyword: "filename"}, _unsigned = {keyword: "unsigned", okAsIdent: true}, _signed = {keyword: "signed", okAsIdent: true};
   var _byte = {keyword: "byte", okAsIdent: true}, _char = {keyword: "char", okAsIdent: true}, _short = {keyword: "short", okAsIdent: true};
-  var _int = {keyword: "int", okAsIdent: true}, _long = {keyword: "long", okAsIdent: true}, _preprocess = {keyword: "#"};
+  var _int = {keyword: "int", okAsIdent: true}, _long = {keyword: "long", okAsIdent: true}, _id = {keyword: "id", okAsIdent: true};
+  var _preprocess = {keyword: "#"};
 
 
 
@@ -5605,13 +5618,14 @@ if (typeof exports != "undefined" && !exports.acorn) {
 
 
   var keywordTypesObjJ = {"IBAction": _action, "IBOutlet": _outlet, "unsigned": _unsigned, "signed": _signed, "byte": _byte, "char": _char,
-                          "short": _short, "int": _int, "long": _long };
+                          "short": _short, "int": _int, "long": _long, "id": _id };
 
 
 
   var objJAtKeywordTypes = {"implementation": _implementation, "outlet": _outlet, "accessors": _accessors, "end": _end,
                             "import": _import, "action": _action, "selector": _selector, "class": _class, "global": _global,
-                            "ref": _ref, "deref": _deref};
+                            "ref": _ref, "deref": _deref, "protocol": _protocol, "optional": _optional, "required": _required,
+                            "interface": _interface};
 
 
 
@@ -5709,7 +5723,7 @@ if (typeof exports != "undefined" && !exports.acorn) {
 
 
 
-  var isKeywordObjJ = makePredicate("IBAction IBOutlet byte char short int long unsigned signed");
+  var isKeywordObjJ = makePredicate("IBAction IBOutlet byte char short int long unsigned signed id");
 
 
 
@@ -7188,6 +7202,47 @@ var preIfLevel = 0;
       return finishNode(node, "EmptyStatement");
 
 
+    case _interface:
+      if (options.objj) {
+        next();
+        node.classname = parseIdent(true);
+        if (eat(_colon))
+          node.superclassname = parseIdent(true);
+        else if (eat(_parenL)) {
+          node.categoryname = parseIdent(true);
+          expect(_parenR, "Expected closing ')' after category name");
+        }
+        if (tokVal === '<') {
+          next();
+          var protocols = [],
+              first = true;
+          node.protocols = protocols;
+          while (tokVal !== '>') {
+            if (!first)
+              expect(_comma, "Expected ',' between protocol names");
+            else first = false;
+            protocols.push(parseIdent(true));
+          }
+          next();
+        }
+        if (eat(_braceL)) {
+          node.ivardeclarations = [];
+          for (;;) {
+            if (eat(_braceR)) break;
+            parseIvarDeclaration(node);
+          }
+          node.endOfIvars = tokStart;
+        }
+        node.body = [];
+        while(!eat(_end)) {
+          if (tokType === _eof) raise(tokPos, "Expected '@end' after '@interface'");
+          node.body.push(parseClassElement());
+        }
+        return finishNode(node, "InterfaceDeclarationStatement");
+      }
+      break;
+
+
     case _implementation:
       if (options.objj) {
         next();
@@ -7197,6 +7252,32 @@ var preIfLevel = 0;
         else if (eat(_parenL)) {
           node.categoryname = parseIdent(true);
           expect(_parenR, "Expected closing ')' after category name");
+        }
+        if (tokVal === '<') {
+          next();
+          var protocols = [],
+              first = true;
+          node.protocols = protocols;
+          while (tokVal !== '>') {
+            if (!first)
+              expect(_comma, "Expected ',' between protocol names");
+            else first = false;
+            protocols.push(parseIdent(true));
+          }
+          next();
+        }
+        if (tokVal === '<') {
+          next();
+          var protocols = [],
+              first = true;
+          node.protocols = protocols;
+          while (tokVal !== '>') {
+            if (!first)
+              expect(_comma, "Expected ',' between protocol names");
+            else first = false;
+            protocols.push(parseIdent(true));
+          }
+          next();
         }
         if (eat(_braceL)) {
           node.ivardeclarations = [];
@@ -7211,46 +7292,87 @@ var preIfLevel = 0;
           if (tokType === _eof) raise(tokPos, "Expected '@end' after '@implementation'");
           node.body.push(parseClassElement());
         }
+        return finishNode(node, "ClassDeclarationStatement");
       }
-      return finishNode(node, "ClassDeclarationStatement");
+      break;
+
+
+    case _protocol:
+
+      if (options.objj && input.charCodeAt(tokPos) !== 40) {
+        next();
+        node.protocolname = parseIdent(true);
+        if (tokVal === '<') {
+          next();
+          var protocols = [],
+              first = true;
+          node.protocols = protocols;
+          while (tokVal !== '>') {
+            if (!first)
+              expect(_comma, "Expected ',' between protocol names");
+            else first = false;
+            protocols.push(parseIdent(true));
+          }
+          next();
+        }
+        while(!eat(_end)) {
+          if (tokType === _eof) raise(tokPos, "Expected '@end' after '@protocol'");
+          if (eat(_required)) continue;
+          if (eat(_optional)) {
+            while(!eat(_required) && tokType !== _end) {
+              (node.optional || (node.optional = [])).push(parseProtocolClassElement());
+            }
+          } else {
+            (node.required || (node.required = [])).push(parseProtocolClassElement());
+          }
+        }
+        return finishNode(node, "ProtocolDeclarationStatement");
+      }
+      break;
 
 
     case _import:
-      next();
-      if (tokType === _string)
-        node.localfilepath = true;
-      else if (tokType ===_filename)
-        node.localfilepath = false;
-      else
-        unexpected();
+      if (options.objj) {
+        next();
+        if (tokType === _string)
+          node.localfilepath = true;
+        else if (tokType ===_filename)
+          node.localfilepath = false;
+        else
+          unexpected();
 
-      node.filename = parseStringNumRegExpLiteral();
-      return finishNode(node, "ImportStatement");
+        node.filename = parseStringNumRegExpLiteral();
+        return finishNode(node, "ImportStatement");
+      }
+      break;
 
 
     case _preprocess:
-      next();
-      return finishNode(node, "PreprocessStatement");
+      if (options.objj) {
+        next();
+        return finishNode(node, "PreprocessStatement");
+      }
+      break;
 
 
     case _class:
-      next();
-      node.id = parseIdent(false);
-      return finishNode(node, "ClassStatement");
+      if (options.objj) {
+        next();
+        node.id = parseIdent(false);
+        return finishNode(node, "ClassStatement");
+      }
+      break;
 
 
     case _global:
-      next();
-      node.id = parseIdent(false);
-      return finishNode(node, "GlobalStatement");
+      if (options.objj) {
+        next();
+        node.id = parseIdent(false);
+        return finishNode(node, "GlobalStatement");
+      }
+      break;
 
-
-
-
-
-
-
-    default:
+    }
       var maybeName = tokVal, expr = parseExpression();
       if (starttype === _name && expr.type === "Identifier" && eat(_colon)) {
         for (var i = 0; i < labels.length; ++i)
@@ -7266,8 +7388,8 @@ var preIfLevel = 0;
         semicolon();
         return finishNode(node, "ExpressionStatement");
       }
-    }
   }
+
   function parseIvarDeclaration(node) {
     var outlet;
     if (eat(_outlet))
@@ -7327,49 +7449,56 @@ var preIfLevel = 0;
     semicolon();
   }
 
-  function parseClassElement() {
-    var methodType = tokVal,
-        element = startNode();
-    if (eat(_plusmin)) {
-      element.methodtype = methodType;
+  function parseMethodDeclaration(node) {
+    node.methodtype = tokVal;
+    expect(_plusmin, "Method declaration must start with '+' or '-'");
 
+    if (eat(_parenL)) {
+      var typeNode = startNode();
+      if (eat(_action)) {
+        node.action = finishNode(typeNode, "ObjectiveJActionType");
+        typeNode = startNode();
+      }
+      if (!eat(_parenR)) {
+        node.returntype = parseObjectiveJType(typeNode);
+        expect(_parenR, "Expected closing ')' after method return type");
+      }
+    }
+
+    var first = true,
+        selectors = [],
+        args = [];
+    node.selectors = selectors;
+    node.arguments = args;
+    for (;;) {
+      if (tokType !== _colon) {
+        selectors.push(parseIdent(true));
+        if (first && tokType !== _colon) break;
+      } else
+        selectors.push(null);
+      expect(_colon, "Expected ':' in selector");
+      var argument = {};
+      args.push(argument);
       if (eat(_parenL)) {
-        if (eat(_action))
-          element.action = true;
-        if (!eat(_parenR)) {
-          element.returntype = parseObjectiveJType();
-          expect(_parenR, "Expected closing ')' after method return type");
-        }
+        argument.type = parseObjectiveJType();
+        expect(_parenR, "Expected closing ')' after method argument type");
       }
-
-      var first = true,
-          selectors = [],
-          args = [];
-      element.selectors = selectors;
-      element.arguments = args;
-      for (;;) {
-        if (tokType !== _colon) {
-          selectors.push(parseIdent(true));
-          if (first && tokType !== _colon) break;
-        } else
-          selectors.push(null);
-        expect(_colon, "Expected ':' in selector");
-        var argument = {};
-        args.push(argument);
-        if (eat(_parenL)) {
-          argument.type = parseObjectiveJType();
-          expect(_parenR, "Expected closing ')' after method argument type");
-        }
-        argument.identifier = parseIdent(false);
-        if (tokType === _braceL || eat(_semi)) break;
-        if (eat(_comma)) {
-          expect(_dotdotdot, "Expected '...' after ',' in method declaration");
-          element.parameters = true;
-          break;
-        }
-        first = false;
+      argument.identifier = parseIdent(false);
+      if (tokType === _braceL || tokType === _semi) break;
+      if (eat(_comma)) {
+        expect(_dotdotdot, "Expected '...' after ',' in method declaration");
+        node.parameters = true;
+        break;
       }
+      first = false;
+    }
+  }
 
+  function parseClassElement() {
+    var element = startNode();
+    if (tokVal === '+' || tokVal === '-') {
+      parseMethodDeclaration(element);
+      eat(_semi);
       element.startOfBody = lastEnd;
 
 
@@ -7380,6 +7509,14 @@ var preIfLevel = 0;
       return finishNode(element, "MethodDeclarationStatement");
     } else
       return parseStatement();
+  }
+
+  function parseProtocolClassElement() {
+    var element = startNode();
+    parseMethodDeclaration(element);
+
+    semicolon();
+    return finishNode(element, "MethodDeclarationStatement");
   }
 
 
@@ -7684,6 +7821,14 @@ var preIfLevel = 0;
       expect(_parenR, "Expected closing ')' after selector");
       return finishNode(node, "SelectorLiteralExpression");
 
+    case _protocol:
+      var node = startNode();
+      next();
+      expect(_parenL, "Expected '(' after '@protocol'");
+      node.id = parseIdent(true);
+      expect(_parenR, "Expected closing ')' after protocol name");
+      return finishNode(node, "ProtocolLiteralExpression");
+
     case _ref:
       var node = startNode();
       next();
@@ -7701,6 +7846,9 @@ var preIfLevel = 0;
       return finishNode(node, "Dereference");
 
     default:
+      if(tokType.okAsIdent)
+        return parseIdent();
+
       unexpected();
     }
   }
@@ -7919,45 +8067,63 @@ var preIfLevel = 0;
     next();
     return finishNode(node, "Literal");
   }
-  function parseObjectiveJType() {
-    var node = startNode();
+  function parseObjectiveJType(startFrom) {
+    var node = startFrom ? startNodeFrom(startFrom) : startNode();
     if (tokType === _name) {
+
       node.name = tokVal;
+      node.typeisclass = true;
       next();
-      if (tokVal === '<') {
-        next();
-        node.protocol = parseIdent(true);
-        if (tokVal !== '>') unexpected();
-        next();
-      }
     } else {
       node.name = tokType.keyword;
+
       if (!eat(_void)) {
-        var nextKeyWord;
-        if (eat(_signed) || eat(_unsigned))
-          nextKeyWord = tokType.keyword || true;
-        if (eat(_char) || eat(_byte) || eat(_short)) {
-          if (nextKeyWord)
-            node.name += " " + nextKeyWord;
-          nextKeyWord = tokType.keyword || true;
-        } else {
-          if (eat(_int)) {
-            if (nextKeyWord)
-              node.name += " " + nextKeyWord;
-            nextKeyWord = tokType.keyword || true;
+        if (eat(_id)) {
+
+          if (tokVal === '<') {
+            var first = true,
+                protocols = [];
+            node.protocols = protocols;
+            do {
+              next();
+              if (first)
+                first = false;
+              else
+                eat(_comma);
+              protocols.push(parseIdent(true));
+            } while (tokVal !== '>');
+            next();
           }
-          if (eat(_long)) {
+        } else {
+
+          var nextKeyWord;
+          if (eat(_signed) || eat(_unsigned))
+            nextKeyWord = tokType.keyword || true;
+          if (eat(_char) || eat(_byte) || eat(_short)) {
             if (nextKeyWord)
               node.name += " " + nextKeyWord;
             nextKeyWord = tokType.keyword || true;
+          } else {
+            if (eat(_int)) {
+              if (nextKeyWord)
+                node.name += " " + nextKeyWord;
+              nextKeyWord = tokType.keyword || true;
+            }
             if (eat(_long)) {
-              node.name += " " + nextKeyWord;
+              if (nextKeyWord)
+                node.name += " " + nextKeyWord;
+              nextKeyWord = tokType.keyword || true;
+              if (eat(_long)) {
+                node.name += " " + nextKeyWord;
+              }
             }
           }
-        }
-        if (!nextKeyWord) {
-          node.name = (!options.forbidReserved && tokType.keyword) || unexpected();
-          next();
+          if (!nextKeyWord) {
+
+            node.name = (!options.forbidReserved && tokType.keyword) || unexpected();
+            node.typeisclass = true;
+            next();
+          }
         }
       }
     }
@@ -8159,14 +8325,23 @@ if (!exports.acorn) {
 
   exports.IvarDeclaration = ignore;
 
-  exports.MethodDeclarationStatement = ignore;
-
   exports.PreprocessStatement = ignore;
   exports.ClassStatement = ignore;
   exports.GlobalStatement = ignore;
 
+  exports.ProtocolDeclarationStatement = function(node, st, c) {
+    if (node.required) for (var i = 0; i < node.required.length; ++i) {
+      c(node.required[i], st, "Statement");
+    }
+    if (node.optional) for (var i = 0; i < node.optional.length; ++i) {
+      c(node.optional[i], st, "Statement");
+    }
+  }
+
   exports.MethodDeclarationStatement = function(node, st, c) {
-    c(node.body, st, "Statement");
+    var body = node.body;
+    if (body)
+      c(body, st, "Statement");
   }
 
   exports.MessageSendExpression = function(node, st, c) {
@@ -8178,6 +8353,7 @@ if (!exports.acorn) {
   }
 
   exports.SelectorLiteralExpression = ignore;
+  exports.ProtocolLiteralExpression = ignore;
 
   exports.Reference = function(node, st, c) {
     c(node.element, st, "Identifier");
@@ -8248,7 +8424,12 @@ Scope.prototype.isRootScope = function()
 
 Scope.prototype.currentClassName = function()
 {
-    return this.classDef ? this.classDef.className : this.prev ? this.prev.currentClassName() : null;
+    return this.classDef ? this.classDef.name : this.prev ? this.prev.currentClassName() : null;
+}
+
+Scope.prototype.currentProtocolName = function()
+{
+    return this.protocolDef ? this.protocolDef.name : this.prev ? this.prev.currentProtocolName() : null;
 }
 
 Scope.prototype.getIvarForCurrentClass = function( ivarName)
@@ -8347,6 +8528,217 @@ StringBuffer.prototype.isEmpty = function()
     return this.atoms.length !== 0;
 }
 
+
+
+
+
+var ClassDef = function(isImplementationDeclaration, name, superClass, ivars, instanceMethods, classMethods, protocols)
+{
+    this.name = name;
+    if (superClass)
+        this.superClass = superClass;
+    if (ivars)
+        this.ivars = ivars;
+    if (isImplementationDeclaration) {
+        this.instanceMethods = instanceMethods || Object.create(null);
+        this.classMethods = classMethods || Object.create(null);
+    }
+    if (protocols)
+        this.protocols = protocols;
+}
+
+ClassDef.prototype.addInstanceMethod = function(methodDef) {
+    this.instanceMethods[methodDef.name] = methodDef;
+}
+
+ClassDef.prototype.addClassMethod = function(methodDef) {
+    this.classMethods[methodDef.name] = methodDef;
+}
+
+ClassDef.prototype.listOfNotImplementedMethodsForProtocols = function(protocolDefs) {
+    var resultList = [],
+        instanceMethods = this.getInstanceMethods(),
+        classMethods = this.getClassMethods();
+
+    for (var i = 0, size = protocolDefs.length; i < size; i++)
+    {
+        var protocolDef = protocolDefs[i],
+            protocolInstanceMethods = protocolDef.requiredInstanceMethods,
+            protocolClassMethods = protocolDef.requiredClassMethods,
+            inheritFromProtocols = protocolDef.protocols;
+
+        if (protocolInstanceMethods)
+            for (var methodName in protocolInstanceMethods) {
+                var methodDef = protocolInstanceMethods[methodName];
+
+                if (!instanceMethods[methodName])
+                    resultList.push({"methodDef": methodDef, "protocolDef": protocolDef});
+            }
+
+        if (protocolClassMethods)
+            for (var methodName in protocolClassMethods) {
+                var methodDef = protocolClassMethods[methodName];
+
+                if (!classMethods[methodName])
+                    resultList.push({"methodDef": methodDef, "protocolDef": protocolDef});
+            }
+
+        if (inheritFromProtocols)
+            resultList = resultList.concat(this.listOfNotImplementedMethodsForProtocols(inheritFromProtocols));
+    }
+
+    return resultList;
+}
+
+ClassDef.prototype.getInstanceMethod = function(name) {
+    var instanceMethods = this.instanceMethods;
+
+    if (instanceMethods) {
+        var method = instanceMethods[name];
+
+        if (method)
+            return method;
+    }
+
+    var superClass = this.superClass;
+
+    if (superClass)
+        return superClass.getInstanceMethod(name);
+
+    return null;
+}
+
+ClassDef.prototype.getClassMethod = function(name) {
+    var classMethods = this.classMethods;
+    if (classMethods) {
+        var method = classMethods[name];
+
+        if (method)
+            return method;
+    }
+
+    var superClass = this.superClass;
+
+    if (superClass)
+        return superClass.getClassMethod(name);
+
+    return null;
+}
+
+
+ClassDef.prototype.getInstanceMethods = function() {
+    var instanceMethods = this.instanceMethods;
+    if (instanceMethods) {
+        var superClass = this.superClass,
+            returnObject = Object.create(null);
+        if (superClass) {
+            var superClassMethods = superClass.getInstanceMethods();
+            for (var methodName in superClassMethods)
+                returnObject[methodName] = superClassMethods[methodName];
+        }
+
+        for (var methodName in instanceMethods)
+            returnObject[methodName] = instanceMethods[methodName];
+
+        return returnObject;
+    }
+
+    return [];
+}
+
+
+ClassDef.prototype.getClassMethods = function() {
+    var classMethods = this.classMethods;
+    if (classMethods) {
+        var superClass = this.superClass,
+            returnObject = Object.create(null);
+        if (superClass) {
+            var superClassMethods = superClass.getClassMethods();
+            for (var methodName in superClassMethods)
+                returnObject[methodName] = superClassMethods[methodName];
+        }
+
+        for (var methodName in classMethods)
+            returnObject[methodName] = classMethods[methodName];
+
+        return returnObject;
+    }
+
+    return [];
+}
+
+
+var ProtocolDef = function(name, protocols, requiredInstanceMethodDefs, requiredClassMethodDefs)
+{
+    this.name = name;
+    this.protocols = protocols;
+    if (requiredInstanceMethodDefs)
+        this.requiredInstanceMethods = requiredInstanceMethodDefs;
+    if (requiredClassMethodDefs)
+        this.requiredClassMethods = requiredClassMethodDefs;
+}
+
+ProtocolDef.prototype.addInstanceMethod = function(methodDef) {
+    (this.requiredInstanceMethods || (this.requiredInstanceMethods = Object.create(null)))[methodDef.name] = methodDef;
+}
+
+ProtocolDef.prototype.addClassMethod = function(methodDef) {
+    (this.requiredClassMethods || (this.requiredClassMethods = Object.create(null)))[methodDef.name] = methodDef;
+}
+
+ProtocolDef.prototype.getInstanceMethod = function(name) {
+    var instanceMethods = this.requiredInstanceMethods;
+
+    if (instanceMethods) {
+        var method = instanceMethods[name];
+
+        if (method)
+            return method;
+    }
+
+    var protocols = this.protocols;
+
+    for (var i = 0, size = protocols.length; i < size; i++) {
+        var protocol = protocols[i],
+            method = protocol.getInstanceMethod(name);
+
+        if (method)
+            return method;
+    }
+
+    return null;
+}
+
+ProtocolDef.prototype.getClassMethod = function(name) {
+    var classMethods = this.requiredClassMethods;
+
+    if (classMethods) {
+        var method = classMethods[name];
+
+        if (method)
+            return method;
+    }
+
+    var protocols = this.protocols;
+
+    for (var i = 0, size = protocols.length; i < size; i++) {
+        var protocol = protocols[i],
+            method = protocol.getInstanceMethod(name);
+
+        if (method)
+            return method;
+    }
+
+    return null;
+}
+
+
+var MethodDef = function(name, types)
+{
+    this.name = name;
+    this.types = types;
+}
+
 var currentCompilerFlags = "";
 
 var reservedIdentifiers = exports.acorn.makePredicate("self _cmd undefined localStorage arguments");
@@ -8356,12 +8748,12 @@ var wordPrefixOperators = exports.acorn.makePredicate("delete in instanceof new 
 var isLogicalBinary = exports.acorn.makePredicate("LogicalExpression BinaryExpression");
 var isInInstanceof = exports.acorn.makePredicate("in instanceof");
 
-var ObjJAcornCompiler = function( aString, aURL, flags, pass, classDefs)
+var ObjJAcornCompiler = function( aString, aURL, flags, pass, classDefs, protocolDefs)
 {
     this.source = aString;
     this.URL = new CFURL(aURL);
- this.pass = pass;
- this.jsBuffer = new StringBuffer();
+    this.pass = pass;
+    this.jsBuffer = new StringBuffer();
     this.imBuffer = null;
     this.cmBuffer = null;
     this.warnings = [];
@@ -8385,6 +8777,7 @@ var ObjJAcornCompiler = function( aString, aURL, flags, pass, classDefs)
     this.dependencies = [];
     this.flags = flags | ObjJAcornCompiler.Flags.IncludeDebugSymbols;
     this.classDefs = classDefs ? classDefs : Object.create(null);
+    this.protocolDefs = protocolDefs ? protocolDefs : Object.create(null);
     this.lastPos = 0;
     if (currentCompilerFlags & ObjJAcornCompiler.Flags.Generate)
         this.generate = true;
@@ -8401,9 +8794,9 @@ exports.ObjJAcornCompiler.compileToExecutable = function( aString, aURL, flags)
     return new ObjJAcornCompiler(aString, aURL, flags, 2).executable();
 }
 
-exports.ObjJAcornCompiler.compileToIMBuffer = function( aString, aURL, flags, classDefs)
+exports.ObjJAcornCompiler.compileToIMBuffer = function( aString, aURL, flags, classDefs, protocolDefs)
 {
-    return new ObjJAcornCompiler(aString, aURL, flags, 2, classDefs).IMBuffer();
+    return new ObjJAcornCompiler(aString, aURL, flags, 2, classDefs, protocolDefs).IMBuffer();
 }
 
 exports.ObjJAcornCompiler.compileFileDependencies = function( aString, aURL, flags)
@@ -8415,11 +8808,11 @@ exports.ObjJAcornCompiler.compileFileDependencies = function( aString, aURL, fla
 ObjJAcornCompiler.prototype.compilePass2 = function()
 {
     ObjJAcornCompiler.currentCompileFile = this.URL;
- this.pass = 2;
- this.jsBuffer = new StringBuffer();
+    this.pass = 2;
+    this.jsBuffer = new StringBuffer();
     this.warnings = [];
-    compile(this.tokens, new Scope(null ,{ compiler: this }), pass2);
 
+    compile(this.tokens, new Scope(null ,{ compiler: this }), pass2);
     for (var i = 0; i < this.warnings.length; i++)
     {
        var message = this.prettifyMessage(this.warnings[i], "WARNING");
@@ -8430,7 +8823,8 @@ ObjJAcornCompiler.prototype.compilePass2 = function()
 
     }
 
- return this.jsBuffer.toString();
+
+    return this.jsBuffer.toString();
 }
 
 var currentCompilerFlags = "";
@@ -8474,45 +8868,112 @@ ObjJAcornCompiler.prototype.getIvarForClass = function( ivarName, scope)
             if (ivarDef)
                 return ivarDef;
         }
-        c = this.getClassDef(c.superClassName);
+        c = c.superClass;
     }
 }
 
 ObjJAcornCompiler.prototype.getClassDef = function( aClassName)
 {
-    if (!aClassName) return null;
+    if (!aClassName)
+        return null;
 
- var c = this.classDefs[aClassName];
+    var c = this.classDefs[aClassName];
 
- if (c) return c;
+    if (c)
+        return c;
 
- if (objj_getClass)
- {
-  var aClass = objj_getClass(aClassName);
-  if (aClass)
-  {
-   var ivars = class_copyIvarList(aClass),
-    ivarSize = ivars.length,
-    myIvars = Object.create(null),
-    superClass = aClass.super_class;
+    if (typeof objj_getClass === 'function')
+    {
+        var aClass = objj_getClass(aClassName);
+        if (aClass)
+        {
+            var ivars = class_copyIvarList(aClass),
+                ivarSize = ivars.length,
+                myIvars = Object.create(null),
+                protocols = class_copyProtocolList(aClass),
+                protocolSize = protocols.length,
+                myProtocols = Object.create(null),
+                instanceMethodDefs = ObjJAcornCompiler.methodDefsFromMethodList(class_copyMethodList(aClass)),
+                classMethodDefs = ObjJAcornCompiler.methodDefsFromMethodList(class_copyMethodList(aClass.isa)),
+                superClass = class_getSuperclass(aClass);
 
-   for (var i = 0; i < ivarSize; i++)
-   {
-    var ivar = ivars[i];
+            for (var i = 0; i < ivarSize; i++)
+            {
+                var ivar = ivars[i];
 
-       myIvars[ivar.name] = {"type": ivar.type, "name": ivar.name};
-   }
-   c = {"className": aClassName, "ivars": myIvars};
+                myIvars[ivar.name] = {"type": ivar.type, "name": ivar.name};
+            }
 
-   if (superClass)
-    c.superClassName = superClass.name;
-   this.classDefs[aClassName] = c;
-   return c;
-  }
- }
+            for (var i = 0; i < protocolSize; i++)
+            {
+                var protocol = protocols[i],
+                    protocolName = protocol_getName(protocol),
+                    protocolDef = this.getProtocolDef(protocolName);
 
- return null;
+                myProtocols[protocolName] = protocolDef;
+            }
 
+            c = new ClassDef(true, aClassName, superClass ? this.getClassDef(superClass.name) : null, myIvars, instanceMethodDefs, classMethodDefs, myProtocols);
+            this.classDefs[aClassName] = c;
+            return c;
+        }
+    }
+
+    return null;
+}
+
+ObjJAcornCompiler.prototype.getProtocolDef = function( aProtocolName)
+{
+    if (!aProtocolName)
+        return null;
+
+    var p = this.protocolDefs[aProtocolName];
+
+    if (p)
+        return p;
+
+    if (typeof objj_getProtocol === 'function')
+    {
+        var aProtocol = objj_getProtocol(aProtocolName);
+        if (aProtocol)
+        {
+            var protocolName = protocol_getName(aProtocol),
+                requiredInstanceMethods = protocol_copyMethodDescriptionList(aProtocol, true, true),
+                requiredInstanceMethodDefs = ObjJAcornCompiler.methodDefsFromMethodList(requiredInstanceMethods),
+                requiredClassMethods = protocol_copyMethodDescriptionList(aProtocol, true, false),
+                requiredClassMethodDefs = ObjJAcornCompiler.methodDefsFromMethodList(requiredClassMethods),
+                protocols = aProtocol.protocols,
+                inheritFromProtocols = [];
+
+            if (protocols)
+                for (var i = 0, size = protocols.length; i < size; i++)
+                    inheritFromProtocols.push(compiler.getProtocolDef(protocols[i].name));
+
+            p = new ProtocolDef(protocolName, inheritFromProtocols, requiredInstanceMethodDefs, requiredClassMethodDefs);
+
+            this.protocolDefs[aProtocolName] = p;
+            return p;
+        }
+    }
+
+    return null;
+
+}
+
+ObjJAcornCompiler.methodDefsFromMethodList = function( methodList)
+{
+    var methodSize = methodList.length,
+        myMethods = Object.create(null);
+
+    for (var i = 0; i < methodSize; i++)
+    {
+        var method = methodList[i],
+            methodName = method_getName(method);
+
+        myMethods[methodName] = new MethodDef(methodName, method.types);
+    }
+
+    return myMethods;
 }
 
 ObjJAcornCompiler.prototype.executable = function()
@@ -8575,7 +9036,9 @@ function createMessage( aMessage, node, code)
 
 function compile(node, state, visitor) {
     function c(node, st, override) {
+
         visitor[override || node.type](node, st, c);
+
     }
     c(node, state);
 };
@@ -9497,10 +9960,12 @@ ImportStatement: function(node, st, c) {
 ClassDeclarationStatement: function(node, st, c) {
     var compiler = st.compiler,
         generate = compiler.generate,
-        classDef,
         saveJSBuffer = compiler.jsBuffer,
         className = node.classname.name,
-        classScope = new Scope(st);
+        classDef = compiler.getClassDef(className),
+        classScope = new Scope(st),
+        isInterfaceDeclaration = node.type === "InterfaceDeclarationStatement",
+        protocols = node.protocols;
 
     compiler.imBuffer = new StringBuffer();
     compiler.cmBuffer = new StringBuffer();
@@ -9511,10 +9976,19 @@ ClassDeclarationStatement: function(node, st, c) {
 
     if (node.superclassname)
     {
-        classDef = compiler.getClassDef(className);
+
+
+
+
         if (classDef && classDef.ivars)
+
             throw compiler.error_message("Duplicate class " + className, node.classname);
-        if (!compiler.getClassDef(node.superclassname.name))
+
+        if (isInterfaceDeclaration && classDef && classDef.instanceMethods && classDef.classMethods)
+
+            throw compiler.error_message("Duplicate interface definition for class " + className, node.classname);
+        var superClassDef = compiler.getClassDef(node.superclassname.name);
+        if (!superClassDef)
         {
             var errorMessage = "Can't find superclass " + node.superclassname.name;
             for (var i = ObjJAcornCompiler.importStack.length; --i >= 0;)
@@ -9522,7 +9996,7 @@ ClassDeclarationStatement: function(node, st, c) {
             throw compiler.error_message(errorMessage, node.superclassname);
         }
 
-        classDef = {"className": className, "superClassName": node.superclassname.name, "ivars": Object.create(null), "methods": Object.create(null)};
+        classDef = new ClassDef(!isInterfaceDeclaration, className, superClassDef, Object.create(null));
 
         saveJSBuffer.concat("{var the_class = objj_allocateClassPair(" + node.superclassname.name + ", \"" + className + "\"),\nmeta_class = the_class.isa;");
     }
@@ -9538,10 +10012,21 @@ ClassDeclarationStatement: function(node, st, c) {
     }
     else
     {
-        classDef = {"className": className, "superClassName": null, "ivars": Object.create(null), "methods": Object.create(null)};
+        classDef = new ClassDef(!isInterfaceDeclaration, className, null, Object.create(null));
 
         saveJSBuffer.concat("{var the_class = objj_allocateClassPair(Nil, \"" + className + "\"),\nmeta_class = the_class.isa;");
     }
+
+    if (protocols)
+        for (var i = 0, size = protocols.length; i < size; i++)
+        {
+            saveJSBuffer.concat("\nvar aProtocol = objj_getProtocol(\"" + protocols[i].name + "\");");
+            saveJSBuffer.concat("\nif (!aProtocol) throw new SyntaxError(\"*** Could not find definition for protocol \\\"" + protocols[i].name + "\\\"\");");
+            saveJSBuffer.concat("\nclass_addProtocol(the_class, aProtocol);");
+        }
+
+
+
 
     classScope.classDef = classDef;
     compiler.currentSuperClass = "objj_getClass(\"" + className + "\").super_class";
@@ -9551,42 +10036,68 @@ ClassDeclarationStatement: function(node, st, c) {
         hasAccessors = false;
 
 
-    if (node.ivardeclarations) for (var i = 0; i < node.ivardeclarations.length; ++i)
-    {
-        var ivarDecl = node.ivardeclarations[i],
-            ivarType = ivarDecl.ivartype ? ivarDecl.ivartype.name : null,
-            ivarName = ivarDecl.id.name,
-            ivar = {"type": ivarType, "name": ivarName};
-
-        if (firstIvarDeclaration)
+    if (node.ivardeclarations)
+        for (var i = 0; i < node.ivardeclarations.length; ++i)
         {
-            firstIvarDeclaration = false;
-            saveJSBuffer.concat("class_addIvars(the_class, [");
+            var ivarDecl = node.ivardeclarations[i],
+                ivarType = ivarDecl.ivartype ? ivarDecl.ivartype.name : null,
+                ivarName = ivarDecl.id.name,
+                ivars = classDef.ivars,
+                ivar = {"type": ivarType, "name": ivarName},
+                accessors = ivarDecl.accessors;
+
+            if (ivars[ivarName])
+                throw compiler.error_message("Instance variable '" + ivarName + "'is already declared for class " + className, ivarDecl.id);
+
+            if (firstIvarDeclaration)
+            {
+                firstIvarDeclaration = false;
+                saveJSBuffer.concat("class_addIvars(the_class, [");
+            }
+            else
+                saveJSBuffer.concat(", ");
+
+            if (compiler.flags & ObjJAcornCompiler.Flags.IncludeTypeSignatures)
+                saveJSBuffer.concat("new objj_ivar(\"" + ivarName + "\", \"" + ivarType + "\")");
+            else
+                saveJSBuffer.concat("new objj_ivar(\"" + ivarName + "\")");
+
+            if (ivarDecl.outlet)
+                ivar.outlet = true;
+            ivars[ivarName] = ivar;
+            if (!classScope.ivars)
+                classScope.ivars = Object.create(null);
+            classScope.ivars[ivarName] = {type: "ivar", name: ivarName, node: ivarDecl.id, ivar: ivar};
+
+            if (accessors)
+            {
+
+                var property = (accessors.property && accessors.property.name) || ivarName,
+                    getterName = (accessors.getter && accessors.getter.name) || property;
+
+                classDef.addInstanceMethod(new MethodDef(getterName, [ivarType]));
+
+                if (!accessors.readonly)
+                {
+                    var setterName = accessors.setter ? accessors.setter.name : null;
+
+                    if (!setterName)
+                    {
+                        var start = property.charAt(0) == '_' ? 1 : 0;
+
+                        setterName = (start ? "_" : "") + "set" + property.substr(start, 1).toUpperCase() + property.substring(start + 1) + ":";
+                    }
+                    classDef.addInstanceMethod(new MethodDef(setterName, ["void", ivarType]));
+                }
+                hasAccessors = true;
+            }
         }
-        else
-            saveJSBuffer.concat(", ");
-
-        if (compiler.flags & ObjJAcornCompiler.Flags.IncludeTypeSignatures)
-            saveJSBuffer.concat("new objj_ivar(\"" + ivarName + "\", \"" + ivarType + "\")");
-        else
-            saveJSBuffer.concat("new objj_ivar(\"" + ivarName + "\")");
-
-        if (ivarDecl.outlet)
-            ivar.outlet = true;
-        classDef.ivars[ivarName] = ivar;
-        if (!classScope.ivars)
-            classScope.ivars = Object.create(null);
-        classScope.ivars[ivarName] = {type: "ivar", name: ivarName, node: ivarDecl.id, ivar: ivar};
-
-        if (!hasAccessors && ivarDecl.accessors)
-            hasAccessors = true;
-    }
 
     if (!firstIvarDeclaration)
         saveJSBuffer.concat("]);");
 
 
-    if (hasAccessors)
+    if (!isInterfaceDeclaration && hasAccessors)
     {
         var getterSetterBuffer = new StringBuffer();
 
@@ -9636,7 +10147,7 @@ ClassDeclarationStatement: function(node, st, c) {
 
 
         var b = getterSetterBuffer.toString().replace(/@accessors(\(.*\))?/g, "");
-        var imBuffer = ObjJAcornCompiler.compileToIMBuffer(b, "Accessors", compiler.flags, compiler.classDefs);
+        var imBuffer = ObjJAcornCompiler.compileToIMBuffer(b, "Accessors", compiler.flags, compiler.classDefs, compiler.protocolDefs);
 
 
 
@@ -9646,20 +10157,24 @@ ClassDeclarationStatement: function(node, st, c) {
 
     compiler.classDefs[className] = classDef;
 
-    if (node.body.length > 0)
+    var bodies = node.body,
+        bodyLength = bodies.length;
+
+    if (bodyLength > 0)
     {
-        if (!generate) compiler.lastPos = node.body[0].start;
+        if (!generate)
+            compiler.lastPos = bodies[0].start;
 
 
-        for (var i = 0; i < node.body.length; ++i) {
-            var body = node.body[i];
+        for (var i = 0; i < bodyLength; ++i) {
+            var body = bodies[i];
             c(body, classScope, "Statement");
         }
-        if (!generate) saveJSBuffer.concat(compiler.source.substring(compiler.lastPos, body.end));
+        if (!generate)
+            saveJSBuffer.concat(compiler.source.substring(compiler.lastPos, body.end));
     }
 
-
-    if (!node.categoryname) {
+    if (!isInterfaceDeclaration && !node.categoryname) {
         saveJSBuffer.concat("objj_registerClassPair(the_class);\n");
     }
 
@@ -9684,24 +10199,159 @@ ClassDeclarationStatement: function(node, st, c) {
     compiler.jsBuffer = saveJSBuffer;
 
 
-    if (!generate) compiler.lastPos = node.end;
+    if (!generate)
+        compiler.lastPos = node.end;
+
+
+    if (protocols)
+    {
+
+        var protocolDefs = [];
+
+        for (var i = 0, size = protocols.length; i < size; i++)
+            protocolDefs.push(compiler.getProtocolDef(protocols[i].name));
+
+        var unimplementedMethods = classDef.listOfNotImplementedMethodsForProtocols(protocolDefs);
+
+        if (unimplementedMethods && unimplementedMethods.length > 0)
+            for (var i = 0, size = unimplementedMethods.length; i < size; i++) {
+                var unimplementedMethod = unimplementedMethods[i],
+                    methodDef = unimplementedMethod.methodDef,
+                    protocolDef = unimplementedMethod.protocolDef;
+
+                compiler.addWarning(createMessage("Method '" + methodDef.name + "' in protocol '" + protocolDef.name + "' is not implemented", node.classname, compiler.source));
+            }
+    }
+},
+ProtocolDeclarationStatement: function(node, st, c) {
+    var compiler = st.compiler,
+        generate = compiler.generate,
+        buffer = compiler.jsBuffer,
+        protocolName = node.protocolname.name,
+        protocolDef = compiler.getProtocolDef(protocolName),
+        protocols = node.protocols,
+        protocolScope = new Scope(st),
+        inheritFromProtocols = [];
+
+    if (protocolDef)
+        throw compiler.error_message("Duplicate protocol " + protocolName, node.protocolname);
+
+    compiler.imBuffer = new StringBuffer();
+    compiler.cmBuffer = new StringBuffer();
+
+    if (!generate)
+        buffer.concat(compiler.source.substring(compiler.lastPos, node.start));
+
+    buffer.concat("{var the_protocol = objj_allocateProtocol(\"" + protocolName + "\");");
+
+    if (protocols)
+        for (var i = 0, size = protocols.length; i < size; i++)
+        {
+            var protocol = protocols[i],
+                inheritFromProtocolName = protocol.name;
+                inheritProtocolDef = compiler.getProtocolDef(inheritFromProtocolName);
+
+            if (!inheritProtocolDef)
+                throw compiler.error_message("Can't find protocol " + inheritFromProtocolName, protocol);
+
+            buffer.concat("\nvar aProtocol = objj_getProtocol(\"" + inheritFromProtocolName + "\");");
+            buffer.concat("\nif (!aProtocol) throw new SyntaxError(\"*** Could not find definition for protocol \\\"" + protocolName + "\\\"\");");
+            buffer.concat("\nprotocol_addProtocol(the_protocol, aProtocol);");
+            inheritFromProtocols.push(inheritProtocolDef);
+        }
+
+    protocolDef = new ProtocolDef(protocolName, inheritFromProtocols);
+    compiler.protocolDefs[protocolName] = protocolDef;
+    protocolScope.protocolDef = protocolDef;
+
+    var someRequired = node.required;
+
+    if (someRequired) {
+        var requiredLength = someRequired.length;
+
+        if (requiredLength > 0)
+        {
+
+            for (var i = 0; i < requiredLength; ++i)
+            {
+                var required = someRequired[i];
+                if (!generate)
+                    compiler.lastPos = required.start;
+                c(required, protocolScope, "Statement");
+            }
+            if (!generate)
+                buffer.concat(compiler.source.substring(compiler.lastPos, required.end));
+        }
+    }
+
+    buffer.concat("\nobjj_registerProtocol(the_protocol);\n");
+
+
+    if (compiler.imBuffer.isEmpty())
+    {
+        buffer.concat("protocol_addMethodDescriptions(the_protocol, [");
+        buffer.atoms.push.apply(buffer.atoms, compiler.imBuffer.atoms);
+        buffer.concat("], true, true);\n");
+    }
+
+
+    if (compiler.cmBuffer.isEmpty())
+    {
+        buffer.concat("protocol_addMethodDescriptions(the_protocol, [");
+        buffer.atoms.push.apply(buffer.atoms, compiler.cmBuffer.atoms);
+        buffer.concat("], true, false);\n");
+    }
+
+    buffer.concat("}");
+
+    compiler.jsBuffer = buffer;
+
+
+    if (!generate)
+        compiler.lastPos = node.end;
 },
 MethodDeclarationStatement: function(node, st, c) {
     var compiler = st.compiler,
         generate = compiler.generate,
         saveJSBuffer = compiler.jsBuffer,
         methodScope = new Scope(st),
+        isInstanceMethodType = node.methodtype === '-';
         selectors = node.selectors,
-        arguments = node.arguments,
-        types = [node.returntype ? node.returntype.name : "id"],
+        nodeArguments = node.arguments,
+        returnType = node.returntype,
+        types = [returnType ? returnType.name : (node.action ? "void" : "id")],
+        returnTypeProtocols = returnType ? returnType.protocols : null;
         selector = selectors[0].name;
 
-    if (!generate) saveJSBuffer.concat(compiler.source.substring(compiler.lastPos, node.start));
+    if (returnTypeProtocols)
+        for (var i = 0, size = returnTypeProtocols.length; i < size; i++) {
+            var returnTypeProtocol = returnTypeProtocols[i];
+            if (!compiler.getProtocolDef(returnTypeProtocol.name)) {
+                compiler.addWarning(createMessage("Cannot find protocol declaration for '" + returnTypeProtocol.name + "'", returnTypeProtocol, compiler.source));
+            }
+        }
 
-    compiler.jsBuffer = node.methodtype === '-' ? compiler.imBuffer : compiler.cmBuffer;
+    if (!generate)
+        saveJSBuffer.concat(compiler.source.substring(compiler.lastPos, node.start));
+
+    compiler.jsBuffer = isInstanceMethodType ? compiler.imBuffer : compiler.cmBuffer;
 
 
-    for (var i = 0; i < arguments.length; i++) {
+    for (var i = 0; i < nodeArguments.length; i++) {
+        var argument = nodeArguments[i],
+            argumentType = argument.type,
+            argumentTypeName = argumentType ? argumentType.name : "id",
+            argumentProtocols = argumentType ? argumentType.protocols : null;
+
+        types.push(argumentType ? argumentType.name : "id");
+
+        if (argumentProtocols) for (var j = 0, size = argumentProtocols.length; j < size; j++)
+        {
+            var argumentProtocol = argumentProtocols[j];
+            if (!compiler.getProtocolDef(argumentProtocol.name))
+                compiler.addWarning(createMessage("Cannot find protocol declaration for '" + argumentProtocol.name + "'", argumentProtocol, compiler.source));
+        }
+
         if (i === 0)
             selector += ":";
         else
@@ -9710,45 +10360,117 @@ MethodDeclarationStatement: function(node, st, c) {
 
     if (compiler.jsBuffer.isEmpty())
         compiler.jsBuffer.concat(", ");
+
     compiler.jsBuffer.concat("new objj_method(sel_getUid(\"");
     compiler.jsBuffer.concat(selector);
-    compiler.jsBuffer.concat("\"), function");
+    compiler.jsBuffer.concat("\"), ");
 
-
-
-    if (compiler.flags & ObjJAcornCompiler.Flags.IncludeDebugSymbols)
+    if (node.body)
     {
-        compiler.jsBuffer.concat(" $" + st.currentClassName() + "__" + selector.replace(/:/g, "_"));
+        compiler.jsBuffer.concat("function");
+
+        if (compiler.flags & ObjJAcornCompiler.Flags.IncludeDebugSymbols)
+        {
+            compiler.jsBuffer.concat(" $" + st.currentClassName() + "__" + selector.replace(/:/g, "_"));
+        }
+
+        compiler.jsBuffer.concat("(self, _cmd");
+
+        methodScope.methodType = node.methodtype;
+        if (nodeArguments) for (var i = 0; i < nodeArguments.length; i++)
+        {
+            var argument = nodeArguments[i],
+                argumentName = argument.identifier.name;
+
+            compiler.jsBuffer.concat(", ");
+            compiler.jsBuffer.concat(argumentName);
+            methodScope.vars[argumentName] = {type: "method argument", node: argument};
+        }
+
+        compiler.jsBuffer.concat(")\n");
+
+        if (!generate)
+            compiler.lastPos = node.startOfBody;
+        indentation += indentStep;
+        c(node.body, methodScope, "Statement");
+        indentation = indentation.substring(indentationSpaces);
+        if (!generate)
+            compiler.jsBuffer.concat(compiler.source.substring(compiler.lastPos, node.body.end));
+
+        compiler.jsBuffer.concat("\n");
+    } else {
+        compiler.jsBuffer.concat("Nil\n");
     }
 
-    compiler.jsBuffer.concat("(self, _cmd");
-
-    methodScope.methodType = node.methodtype;
-    if (arguments) for (var i = 0; i < arguments.length; i++)
-    {
-        var argument = arguments[i],
-            argumentName = argument.identifier.name;
-
-        compiler.jsBuffer.concat(", ");
-        compiler.jsBuffer.concat(argumentName);
-        types.push(argument.type ? argument.type.name : null);
-        methodScope.vars[argumentName] = {type: "method argument", node: argument};
-    }
-
-    compiler.jsBuffer.concat(")\n");
-
-    if (!generate) compiler.lastPos = node.startOfBody;
-    indentation += indentStep;
-    c(node.body, methodScope, "Statement");
-    indentation = indentation.substring(indentationSpaces);
-    if (!generate) compiler.jsBuffer.concat(compiler.source.substring(compiler.lastPos, node.body.end));
-
-    compiler.jsBuffer.concat("\n");
     if (compiler.flags & ObjJAcornCompiler.Flags.IncludeDebugSymbols)
         compiler.jsBuffer.concat(","+JSON.stringify(types));
+
     compiler.jsBuffer.concat(")");
     compiler.jsBuffer = saveJSBuffer;
-    if (!generate) compiler.lastPos = node.end;
+
+    if (!generate)
+        compiler.lastPos = node.end;
+
+
+    var def = st.classDef,
+        alreadyDeclared;
+
+
+    if (def)
+        alreadyDeclared = isInstanceMethodType ? def.getInstanceMethod(selector) : def.getClassMethod(selector);
+    else
+        def = st.protocolDef;
+
+    if (!def)
+        throw "InternalError: MethodDeclaration without ClassDeclaration or ProtocolDeclaration at line: " + exports.acorn.getLineInfo(compiler.source, node.start).line;
+
+
+
+
+    if (!alreadyDeclared) {
+        var protocols = def.protocols;
+
+        if (protocols)
+            for (var i = 0, size = protocols.length; i < size; i++) {
+                var protocol = protocols[i],
+                    alreadyDeclared = isInstanceMethodType ? protocol.getInstanceMethod(selector) : protocol.getClassMethod(selector);
+
+                if (alreadyDeclared)
+                    break;
+            }
+    }
+
+    if (alreadyDeclared) {
+        var declaredTypes = alreadyDeclared.types;
+
+        if (declaredTypes) {
+            var typeSize = declaredTypes.length;
+            if (typeSize > 0) {
+
+                var declaredReturnType = declaredTypes[0];
+
+
+                if (declaredReturnType !== types[0] && !(declaredReturnType === 'id' && returnType && returnType.typeisclass))
+                    compiler.addWarning(createMessage("Conflicting return type in implementation of '" + selector + "': '" + declaredReturnType + "' vs '" + types[0] + "'", returnType || node.action || selectors[0], compiler.source));
+
+
+                for (var i = 1; i < typeSize; i++) {
+                    var parameterType = declaredTypes[i];
+
+                    if (parameterType !== types[i] && !(parameterType === 'id' && nodeArguments[i - 1].type.typeisclass))
+                        compiler.addWarning(createMessage("Conflicting parameter types in implementation of '" + selector + "': '" + parameterType + "' vs '" + types[i] + "'", nodeArguments[i - 1].type || nodeArguments[i - 1].identifier, compiler.source));
+                }
+            }
+        }
+    }
+
+
+    var methodDef = new MethodDef(selector, types);
+
+    if (isInstanceMethodType)
+        def.addInstanceMethod(methodDef);
+    else
+        def.addClassMethod(methodDef);
 },
 MessageSendExpression: function(node, st, c) {
     var compiler = st.compiler,
@@ -9833,6 +10555,19 @@ SelectorLiteralExpression: function(node, st, c) {
     buffer.concat("\")");
     if (!generate) compiler.lastPos = node.end;
 },
+ProtocolLiteralExpression: function(node, st, c) {
+    var compiler = st.compiler,
+        buffer = compiler.jsBuffer,
+        generate = compiler.generate;
+    if (!generate) {
+        buffer.concat(compiler.source.substring(compiler.lastPos, node.start));
+        buffer.concat(" ");
+    }
+    buffer.concat("objj_getProtocol(\"");
+    buffer.concat(node.id.name);
+    buffer.concat("\")");
+    if (!generate) compiler.lastPos = node.end;
+},
 Reference: function(node, st, c) {
     var compiler = st.compiler,
         buffer = compiler.jsBuffer,
@@ -9874,7 +10609,7 @@ ClassStatement: function(node, st, c) {
     }
     var className = node.id.name;
     if (!compiler.getClassDef(className)) {
-        classDef = {"className": className};
+        classDef = new ClassDef(false, className);
         compiler.classDefs[className] = classDef;
     }
     st.vars[node.id.name] = {type: "class", node: node.id};
@@ -10499,6 +11234,8 @@ objj_class = function(displayName)
     this.method_store = function() { };
     this.method_dtable = this.method_store.prototype;
 
+    this.protocol_list = [];
+
 
 
 
@@ -10508,6 +11245,13 @@ objj_class = function(displayName)
 
 
     this._UID = -1;
+}
+
+objj_protocol = function( aName)
+{
+    this.name = aName;
+    this.instance_methods = { };
+    this.class_methods = { };
 }
 
 objj_object = function()
@@ -10713,6 +11457,149 @@ class_replaceMethod = function( aClass, aSelector, aMethodImplementation)
     return method_imp;
 }
 
+class_addProtocol = function( aClass, aProtocol)
+{
+    if (!aProtocol || class_conformsToProtocol(aClass, aProtocol))
+    {
+        return;
+    }
+
+    (aClass.protocol_list || (aClass.protocol_list == [])).push(aProtocol);
+
+    return true;
+}
+
+class_conformsToProtocol = function( aClass, aProtocol)
+{
+    if (!aProtocol)
+        return false;
+
+    while (aClass)
+    {
+        var protocols = aClass.protocol_list,
+            size = protocols ? protocols.length : 0;
+
+        for (var i = 0; i < size; i++)
+        {
+            var p = protocols[i];
+
+            if (p.name === aProtocol.name)
+            {
+                return true;
+            }
+            if (protocol_conformsToProtocol(p, aProtocol))
+            {
+                return true;
+            }
+        }
+
+        aClass = class_getSuperclass(aClass);
+    }
+
+    return false;
+}
+
+class_copyProtocolList = function( aClass)
+{
+    var protocols = aClass.protocol_list;
+
+    return protocols ? protocols.slice(0) : [];
+}
+
+protocol_conformsToProtocol = function( p1, p2)
+{
+    if (!p1 || !p2)
+        return false;
+
+    if (p1.name === p2.name)
+        return true;
+
+    var protocols = p1.protocol_list,
+        size = protocols ? protocols.length : 0;
+
+    for (var i = 0; i < size; i++)
+    {
+        var p = protocols[i];
+
+        if (p.name === p2.name)
+        {
+            return true;
+        }
+        if (protocol_conformsToProtocol(p, p2))
+        {
+            return true;
+        }
+    }
+
+   return false;
+}
+
+var REGISTERED_PROTOCOLS = { };
+
+objj_allocateProtocol = function( aName)
+{
+    var protocol = new objj_protocol(aName);
+
+    return protocol;
+}
+
+objj_registerProtocol = function( proto)
+{
+    REGISTERED_PROTOCOLS[proto.name] = proto;
+}
+
+protocol_getName = function( proto)
+{
+    return proto.name;
+}
+
+
+protocol_addMethodDescription = function( proto, selector, types, isRequiredMethod, isInstanceMethod)
+{
+    if (!proto || !selector) return;
+
+    if (isRequiredMethod)
+        (isInstanceMethod ? proto.instance_methods : proto.class_methods)[selector] = new objj_method(selector, null, types);
+}
+
+protocol_addMethodDescriptions = function( proto, methods, isRequiredMethod, isInstanceMethod)
+{
+    if (!isRequiredMethod) return;
+
+    var index = 0,
+        count = methods.length,
+        method_dtable = isInstanceMethod ? proto.instance_methods : proto.class_methods;
+
+    for (; index < count; ++index)
+    {
+        var method = methods[index];
+
+        method_dtable[method.name] = method;
+    }
+}
+
+protocol_copyMethodDescriptionList = function( proto, isRequiredMethod, isInstanceMethod)
+{
+    if (!isRequiredMethod)
+        return [];
+
+    var method_dtable = isInstanceMethod ? proto.instance_methods : proto.class_methods,
+        methodList = [];
+
+    for (var selector in method_dtable)
+        if (method_dtable.hasOwnProperty(selector))
+            methodList.push(method_dtable[selector]);
+
+    return methodList;
+}
+
+protocol_addProtocol = function( proto, addition)
+{
+    if (!proto || !addition) return;
+
+    (proto.protocol_list || (proto.protocol_list = [])).push(addition);
+}
+
 var _class_initialize = function( aClass)
 {
     var meta = (((aClass.info & (CLS_META))) ? aClass : aClass.isa);
@@ -10857,6 +11744,7 @@ objj_resetRegisterClasses = function()
         delete global[key];
 
     REGISTERED_CLASSES = {};
+    REGISTERED_PROTOCOLS = {};
 
     resetBundle();
 }
@@ -10970,6 +11858,13 @@ objj_getMetaClass = function( aName)
     var theClass = objj_getClass(aName);
 
     return (((theClass.info & (CLS_META))) ? theClass : theClass.isa);
+}
+
+
+
+objj_getProtocol = function( aName)
+{
+    return REGISTERED_PROTOCOLS[aName];
 }
 
 

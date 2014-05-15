@@ -11,8 +11,8 @@ app.get('/debug', function(req, res){
   res.sendfile(path + 'index-debug.html'); 
 });
 
-app.get('/api', function(req, res){ 
-  res.send(req.params); 
+app.get('/api/:func', function(req, res){ 
+  res.send(req.params.func); 
 });
 
 app.get('/*', function(req, res){
