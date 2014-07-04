@@ -18,16 +18,14 @@ MainFrame = nil; // Static variable for AppController instance
 	IconSet icons;
 }
 
--(void) init 
+-(id) init 
 {
 	[super init];
 
 	MainFrame = self;
-
 	LSA = nil;
 	mainwindow = nil;
 	status = nil;
-
 	progresswindow = [[Progress alloc] init];
 	[progresswindow show];
 
@@ -121,7 +119,7 @@ CPLog.trace("init informer " + iname);
 - (void) isLoggedIn
 {
 	// indicator tests
-	/*
+/*	
 	var indicator = [[StatusIndicator alloc] initWithIco:@"11"]; // clock indicator
 	[indicator addClickObserver:self];
 	[indicator addBageObserver:self];
@@ -143,7 +141,7 @@ indicator = [[StatusIndicator alloc] initWithIco:@"13"]; // eye indicator
 [status setIndicatorBage:@"clock"];
 [status setIndicatorBage:@"eye"];
 [status dropIndicatorBage:@"clock"];
-*/  
+  */
 
 // start logic loop
 //    [self makeRequest:@"r=isloggedid"];
